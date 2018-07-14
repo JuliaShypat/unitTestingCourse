@@ -12,7 +12,7 @@ describe('HeroesCmponent (deep)', () => {
     let fixture: ComponentFixture<HeroesComponent>;
     let mockHeroService;
     let HEROES;
-    
+
     beforeEach(() => {
         HEROES = [
             {id: 1, name: 'Test 1', strength: 8},
@@ -47,5 +47,15 @@ describe('HeroesCmponent (deep)', () => {
         for (let i = 0; i < heroComponens.length; i++) {
             expect(heroComponens[i].componentInstance.hero).toEqual(HEROES[i]);
         }
+    })
+    it(`should call heroService.deleteHero when Hero Component's
+        detete button is clicked`, () => {
+          spyOn(fixture.componentInstance, 'delete');
+          mockHeroService.getHeroes.and.returnValue(of(HEROES));
+          fixture.detectChanges();
+
+          const heroComponens = fixture.debugElement.queryAll(By.directive(HeroComponent));
+          (<HeroComponent>heroComponens[0].componentInstance).delete.emit(undefined);
+          expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
     })
 });
